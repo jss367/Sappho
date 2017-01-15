@@ -15,11 +15,6 @@ def sappho_route():
     return render_template('sappho.html')
 
 
-@app.route('/tutorial')
-def tutorial_route():
-    return render_template('tutorial.html')
-
-
 @app.route('/about')
 def about_route():
     return render_template('about.html')
