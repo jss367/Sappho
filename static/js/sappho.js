@@ -7,7 +7,7 @@ var modifiedText = false;
 var displaySynonyms = true;
 var textField = null;
 var textPlaceholder = null;
-var expressoPitch = null;
+var sapphoPitch = null;
 var metricsTables = null;
 var metricsElements = null;
 var analyzeTextButton = null;
@@ -29,7 +29,7 @@ $(function(){
         // find important DOM elements for future use
         textField = $("#text-entry");
         textPlaceholder = $("#text-placeholder");
-        expressoPitch = $("#expresso-pitch");
+        sapphoPitch = $("#sappho-pitch");
         metricsTables = $("#metrics-tables");
         metricsElements = $("[data-metric]");
         analyzeTextButton = $("#analyze-text");
@@ -124,12 +124,12 @@ $(function(){
         textField.on("input", function() {
             if (textField.text().length) {
                 textPlaceholder.hide();
-                expressoPitch.hide();
+                sapphoPitch.hide();
                 analyzeTextButton.button("reset");
             }
             else {
                 textPlaceholder.show();
-                expressoPitch.show();
+                sapphoPitch.show();
                 textField.html("");
                 analyzeTextButton.button("empty");
                 setTimeout(function() {
