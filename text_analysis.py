@@ -2,9 +2,11 @@ from __future__ import division
 import os
 import re
 from bs4 import BeautifulSoup
-import operator
+#import operator
 from numpy import std
 import nltk
+import matplotlib.pyplot as plt
+#%matplotlib inline
 
 # pre-load and pre-compile required variables and methods
 html_div_br_div_re = re.compile('</div><div><br></div>')
@@ -38,6 +40,48 @@ with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'corpora/irre
     for stem_old, stem_new in dict_irregular_stems_draft:
         dict_irregular_stems[stem_old] = stem_new
 
+    
+def analyze_textz(html):
+    word_count = find_word_count('three')
+    metrics = dict()
+    data = dict()
+    metrics['word_count'] = word_count
+    original_text = "This is what you originally wrote"
+    return original_text, data, metrics
+    
+
+def find_word_count(text):
+    '''
+    This function takes in text that has/hasn't been tokenized
+    It returns the word count, which is fed back into metrics['word count']
+    '''
+    word_count = 3
+    return(word_count)
+    
+def label_parts_of_speech(text):
+    #Labeling parts of speech
+    tokened = nltk.word_tokenize(text)
+    tagged = nltk.pos_tag(tokened)   #POS_tag is part of speech; JJ is adjective
+    return(tagged)
+
+def POS_visual():
+    #Look at the frequency of different parts of speech
+    tag_fd = nltk.FreqDist(tag for (word, tag) in tagged)
+    #print(tag_fd.most_common())
+    nouns = tag_fd['NN'] + tag_fd['NNS'] + tag_fd['NNP'] + tag_fd['NNPS'] #singular and plural and proper
+    prep_con = tag_fd['IN'] #preposition or conjunction
+    determiner = tag_fd['DT']
+    commas = tag_fd[','] #Find if they are over or under using commas?
+    adverbs = tag_fd['RB'] + tag_fd['RBR'] + tag_fd['RBS']
+    verbs = tag_fd['VB'] + tag_fd['VBD'] + tag_fd['VBG'] + tag_fd['VBN'] + tag_fd['VBP'] + tag_fd['VBZ'] 
+    adjectives = tag_fd['JJ']
+    #Pie chart of different parts of speech, compare to famous works and warn if it is significantly different
+    values = [nouns, verbs, adverbs, adjectives]
+    labels = ['nouns', 'verbs', 'adverbs', 'adjectives']
+    plt.pie(values, labels=labels)
+    plt.show()
+
+
 
 def stem_better(word):
     stem = stemmer.stem(word.lower())
@@ -60,8 +104,12 @@ with open(os.path.join('corpora/word-freq')) as f:
 
 def analyze_text(html):
 
-    # create data and metrics dictionaries
+#     create data and metrics dictionaries
     data = dict()
+    '''
+    data (and metrics?) will hold all my results and be returned in this function
+    
+    '''
     metrics = dict()
 
     ### parse text/html string
@@ -130,9 +178,6 @@ def analyze_text(html):
     for idx, stem in enumerate(stems):
         data['stems'][word2token_map[idx]] = stem
 
-    # tag tokens as part-of-speech
-    #sents_tokens_tags = tagger.batch_tag(sents_tokens)
-    #data['parts_of_speech'] = [pos for sent in sents_tokens_tags for (token, pos) in sent]
     data['parts_of_speech'] = 'VBD'
 
     # fix symbol and apostrophed verb tags
@@ -147,13 +192,7 @@ def analyze_text(html):
                 data['parts_of_speech'][idx] = 'VBD'
             elif token == "'ll":
                 data['parts_of_speech'][idx] = 'MD'
-            #else:#elif data['parts_of_speech'][idx].isalnum():
-            #    data['parts_of_speech'][idx] = 'SYM'
 
-    # fix some verbs ending in -ing being counted as nouns
-    #for idx, token in enumerate(tokens):
-    #    if (token[-3:] == 'ing') and (idx < len(tokens)) and (data['parts_of_speech'][idx+1] == 'IN'):
-    #        data['parts_of_speech'][idx] = 'VBG'
 
     # find verb groups
     data['verb_groups'] = [None] * len(tokens)
@@ -467,36 +506,9 @@ def analyze_text(html):
     bigram_freq = bcf.bigram_fd
     trigram_freq = bcf.ngram_fd
 
-    metrics['word_freq'] = [] #Add this to remove the below
-	# sort and filter word frequencies
-    #sorted_word_freq = sorted(word_freq.iteritems(), key=operator.itemgetter(1))
-    #sorted_word_freq.reverse()
-    #sorted_word_freq = [word for word in sorted_word_freq if (word[1] > 1) and (word[0] not in stopset)]
-    #if sorted_word_freq:
-    #    metrics['word_freq'] = sorted_word_freq
-    #else:
-    #    metrics['word_freq'] = []
-
+    metrics['word_freq'] = []
     metrics['bigram_freq'] = []
-    # sort and filter bigram frequencies
-    #sorted_bigram_freq = sorted(bigram_freq.iteritems(), key=operator.itemgetter(1))
-    #sorted_bigram_freq.reverse()
-    #sorted_bigram_freq = [bigram for bigram in sorted_bigram_freq if
-    #                      (bigram[1] > 1) and (bigram[0][0] not in stopset) and (bigram[0][1] not in stopset)]
-    #if sorted_bigram_freq:
-    #    metrics['bigram_freq'] = sorted_bigram_freq
-    #else:
-    #    metrics['bigram_freq'] = []
-
     metrics['trigram_freq'] = []
-    # sort and filter trigram frequencies
-    #sorted_trigram_freq = sorted(trigram_freq.iteritems(), key=operator.itemgetter(1))
-    #sorted_trigram_freq.reverse()
-    #sorted_trigram_freq = [trigram for trigram in sorted_trigram_freq if trigram[1] > 1]
-    #if sorted_trigram_freq:
-    #    metrics['trigram_freq'] = sorted_trigram_freq
-    #else:
-    #    metrics['trigram_freq'] = []
 
 
     return original_text, data, metrics
