@@ -260,7 +260,7 @@ $(function(){
                         measuredTime = endTime - startTime;
                         ga('send', 'timing', 'analyze-text-ajax', 'error', measuredTime);
                         ga('send', 'event', 'analyze-text', 'server-error');
-                        showAlert("ERROR: Could not analyze text. The website might be overloaded due to high number of visitors. Please, wait couple minutes and try analyzing again.");
+                        showAlert("ERROR: Could not analyze text. Please email us as info.sappho to let us know.");
 
                         // reset UI
                         spinner.stop();
