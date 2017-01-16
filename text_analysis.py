@@ -452,10 +452,10 @@ def analyze_text(html):
 
     # find and count noun clusters
     data['noun_clusters'] = [None] * len(tokens)
-    noun_cluster_count = 0
-    noun_count_in_cluster = 0
+    #noun_cluster_count = 0
+    #noun_count_in_cluster = 0
     total_noun_count_in_cluster = 0
-    noun_cluster_span = [None, None]
+    #noun_cluster_span = [None, None]
     #for idx, token in enumerate(tokens):
     #    if data['parts_of_speech'][idx][:2] == 'NN':
     #        if noun_cluster_span[0] is None:
