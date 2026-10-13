@@ -8,6 +8,13 @@ from text_analysis import analyze_text
 
 app = Flask(__name__)
 app.config.update(**os.environ)
+# Preserve the former URL-encoded form bound, including encoded field overhead.
+try:
+    app.config['MAX_CONTENT_LENGTH'] = int(os.environ.get('MAX_CONTENT_LENGTH', 500_000))
+except ValueError:
+    raise ValueError('MAX_CONTENT_LENGTH must be a positive integer') from None
+if app.config['MAX_CONTENT_LENGTH'] <= 0:
+    raise ValueError('MAX_CONTENT_LENGTH must be a positive integer')
 
 
 @app.route('/')
